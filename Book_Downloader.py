@@ -2,12 +2,12 @@ import urllib
 import urllib2
 from bs4 import BeautifulSoup
 
-def DownloadURL(Contents):          #Function to extract the URL of that page where the download link is present
+def DownloadURL(Contents):          #Function to extract the URL of the page that contains the download URL
     url, extension = '', ''         
     flaglang, flagext, flag = 0, 0, 0       
     for results in range(len(Contents)):         #Iterates through every element of the Contents list     
         for i in Contents[results]:         #Iterates through every line of each element of the Contents list
-            links = str(i).split('"')       #Extracts web links from strings
+            links = str(i).split('"')       #Splits every string with respect to quotation marks
             for lines in i:
                 if 'English' in lines:      #Checks if the language of the book is English
                     flaglang = 1
@@ -24,7 +24,7 @@ def DownloadURL(Contents):          #Function to extract the URL of that page wh
             if flag == 1:
                 for lines in links:         #Iterates through links
                     if 'ads' in lines:      #Checks if the substring 'ads' appears in links, which is the link of the webpage where the download link is present
-                        url = 'http://libgen.io' + lines        #Creates a libgen download page link
+                        url = 'http://libgen.io' + lines        #Creates a libgen download page URL
                         break
         if flag == 1:break
 
@@ -32,16 +32,16 @@ def DownloadURL(Contents):          #Function to extract the URL of that page wh
 
 def Download(url, title, extension):       #Function to download the book
     page = urllib2.urlopen(url).read()
-    soup = BeautifulSoup(page, 'lxml')
+    soup = BeautifulSoup(page, "html.parser")
     links = soup.find_all('a')             #Finds all the links in the webpage
     for link in links:
-        if 'get.php' in str(link):            
-            temp = str(link).split('"')    #Stores all the links with get.php in them
-    dloadurl = 'http://libgen.io' + temp[1]      #Generates the download link. 
+        if 'get.php' in str(link):      #Finds the string which containts 'get.php'. This is the partial download link for the book            
+            temp = str(link).split('"')         #Splits the string to extract the download URL
+    dloadurl = 'http://libgen.io' + temp[1]      #Generates the complete download URL 
     print 'Downloading book...'
     dloadurl = dloadurl.replace('amp;','')       
     title = title.replace(' ','_')
-    location = 'C:\Users\User_Name\Desktop\%s' %(title+extension)        #Stores the file in this location. The location needs to be changed when run on a different system.
+    location = 'C:\Users\User_Name\Desktop\%s' %(title+extension)        #Stores the file in this location. The location needs to be changed depending on the operating system.
     urllib.urlretrieve(dloadurl, location)
     print 'Download Completed!'
 
@@ -50,20 +50,20 @@ while len(title) == 0:
     title = raw_input('Please enter the name of the book: ')        
 while len(author) == 0:
     author = raw_input('Please enter the name of the author: ')        
-title_author = title + ' ' + author        #A single search is created which can be used to search the book
+title_author = title + ' ' + author        #Creates a single search term which is used to search the book
 url = 'http://libgen.io/search.php?req='
 url += urllib.quote_plus(title_author)        #Creates a search URL for Libgen
 page = urllib2.urlopen(url).read()      #Opens the search URL
 print "Searching for book..."
-if 'view.php?id' not in page:        #Checks if there are any downlaod links on the page
+if 'view.php?id' not in page:        #Checks if there are any results on the page
     print 'Book does not exist.'
 
 else:
     print "Book exists."
-    soup = BeautifulSoup(page, 'lxml')      #Creates objects of every element of the webpage using the library 'Beautiful Soup'
+    soup = BeautifulSoup(page, "html.parser")      #Creates objects of every element of the webpage using the library 'Beautiful Soup'
     Contents = []    
     for sibling in soup.find("table",{"class":"c"}).tr.next_siblings:       #Extracts contents of a table with class 'c' from the HTML code of the webpage
-        Contents.append(sibling)        #Adds the contents to the Contents list
+        Contents.append(sibling)        #Adds every row of the table to the Contents list
     url, extension = DownloadURL(Contents)
     Download(url, title, extension)
 
