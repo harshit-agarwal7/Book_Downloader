@@ -46,8 +46,10 @@ def Download(url, title, extension):       #Function to download the book
     print 'Download Completed!'
 
 title, author = '', ''      
-title = raw_input('Please enter the name of the book: ')        
-author = raw_input('Please enter the name of the author: ')        
+while len(title) == 0:
+    title = raw_input('Please enter the name of the book: ')        
+while len(author) == 0:
+    author = raw_input('Please enter the name of the author: ')        
 title_author = title + ' ' + author        #A single search is created which can be used to search the book
 url = 'http://libgen.io/search.php?req='
 url += urllib.quote_plus(title_author)        #Creates a search URL for Libgen
