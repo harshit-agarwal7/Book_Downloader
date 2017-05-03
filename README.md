@@ -7,9 +7,9 @@ Software - Python 2.7
 HOW TO RUN: 
 1. On line 44, change the location of the place where the books would be saved. If you want to save the book on the desktop, change the location from 'C:\Users\User_Name\Desktop\%s' to:
 
-	Windows: 'C:\Users\"PC Name"\Desktop\%s', where "PC Name" is the name of the user account of your PC. 
+	Windows: 'C:\Users\"username"\Desktop\%s', where "username" is the name of the user account of your PC. 
 	
-	Mac: 
+	Mac:  '/Users/"username"/Desktop/%s', where "username" is the name of the user account of your PC.
 	
 2. Run the program
 3. Type the name of the book that you want and press the enter key. 
