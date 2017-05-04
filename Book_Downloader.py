@@ -66,7 +66,7 @@ def Download(url, title, extension):       #Function to download the book
     title = title.replace(' ','_')
     location = 'C:\Users\User_Name\Desktop\%s' %(title+extension)        #Stores the file in this location. The location needs to be changed depending on the operating system.
     urllib.urlretrieve(dloadurl, location)
-    print 'Download Completed!'
+    print 'Download Completed! Check your desktop'
 
 
 title, author = '', ''
