@@ -49,17 +49,18 @@ title, author = '', ''
 while len(title) == 0:
     title = raw_input('Please enter the name of the book: ')        
 while len(author) == 0:
-    author = raw_input('Please enter the name of the author: ')        
+    author = raw_input('Please enter the name of the author: ')
+print "Searching for book..."
 title_author = title + ' ' + author        #Creates a single search term which is used to search the book
 url = 'http://libgen.io/search.php?req='
 url += urllib.quote_plus(title_author)        #Creates a search URL for Libgen
 page = urllib2.urlopen(url).read()      #Opens the search URL
-print "Searching for book..."
+
 if 'view.php?id' not in page:        #Checks if there are any results on the page
-    print 'Book does not exist.'
+    print 'Book not found.'
 
 else:
-    print "Book exists."
+    print "Book found."
     soup = BeautifulSoup(page, "html.parser")      #Creates objects of every element of the webpage using the library 'Beautiful Soup'
     Contents = []    
     for sibling in soup.find("table",{"class":"c"}).tr.next_siblings:       #Extracts contents of a table with class 'c' from the HTML code of the webpage
